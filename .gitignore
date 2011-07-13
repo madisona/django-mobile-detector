@@ -1,0 +1,9 @@
+
+.idea*
+example.db
+
+build/*
+dist/*
+
+*.pyc
+*.pyo
