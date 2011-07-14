@@ -17,7 +17,7 @@ setup(
     author_email="aaron.l.madison@gmail.com",
     description="A small app to detect mobile browsers.",
     long_description=open(README, 'r').read(),
-#    url="https://github.com/madisona/django-mongo-storage",
+    url="https://github.com/madisona/django-mobile-detector",
     test_suite='runtests.runtests',
     packages=("mobile_detector",),
     install_requires=REQUIREMENTS,
