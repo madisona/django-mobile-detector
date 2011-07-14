@@ -1,10 +1,16 @@
 
 from django import test
+from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 
 from mobile_detector import is_mobile, use_mobile, user_declined_mobile
 from mobile_detector import mobile_cookie_name
 from mobile_detector.context_processors import detect_mobile
+
+__all__ = (
+    'MobileUtilitiesTests', 'ContextProcessorTests',
+    'MobileDetectorViewTests',
+)
 
 class MobileUtilitiesTests(test.TestCase):
 
@@ -76,3 +82,19 @@ class ContextProcessorTests(test.TestCase):
         self.assertEqual({
             'use_mobile': False,
         }, context)
+
+class MobileDetectorViewTests(test.TestCase):
+
+    def test_force_mobile_sets_mobile_cookie_to_true_and_redirects_to_next_parameter(self):
+        expected_url = 'http://www.example.com/next'
+        response = self.client.get(reverse("force_mobile"), data={'next': expected_url})
+        self.assertEqual(302, response.status_code)
+        self.assertTrue(expected_url, response['Location'])
+        self.assertEqual('Set-Cookie: use_mobile=true; Path=/', str(response.cookies))
+        
+    def test_force_desktop_sets_mobile_cookie_to_false_and_redirects_to_next_parameter(self):
+        expected_url = 'http://www.example.com/next'
+        response = self.client.get(reverse("force_desktop"), data={'next': expected_url})
+        self.assertEqual(302, response.status_code)
+        self.assertTrue(expected_url, response['Location'])
+        self.assertEqual('Set-Cookie: use_mobile=false; Path=/', str(response.cookies))
