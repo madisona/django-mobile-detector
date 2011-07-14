@@ -7,7 +7,7 @@ VERSION = '0.1.0'
 
 __all__ = (
     'VERSION',
-    'is_mobile', 'use_mobile', 'user_declined_mobile',
+    'is_mobile', 'use_mobile', 'no_mobile_cookie',
 )
 
 mobile_cookie_name = getattr(settings, 'MOBILE_COOKIE_NAME', 'use_mobile')
@@ -47,8 +47,11 @@ def is_mobile(request):
     user_agent = request.META.get('HTTP_USER_AGENT', '')
     return bool(MOBILE_RE_1.search(user_agent) or MOBILE_RE_2.search(user_agent[0:4]))
 
-def user_declined_mobile(request):
+def no_mobile_cookie(request):
     return request.COOKIES.get(mobile_cookie_name) == "false"
 
+def use_mobile_cookie(request):
+    return request.COOKIES.get(mobile_cookie_name) == "true"
+
 def use_mobile(request):
-    return bool(is_mobile(request) and not user_declined_mobile(request))
+    return use_mobile_cookie(request) or bool(is_mobile(request) and not no_mobile_cookie(request))

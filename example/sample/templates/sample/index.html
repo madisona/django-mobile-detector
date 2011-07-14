@@ -1,0 +1,9 @@
+
+{% if use_mobile %}
+<h1>Use Mobile</h1>
+{% else %}
+<h1>Use Desktop View</h1>
+{% endif %}
+
+<a href="{% url force_mobile %}">mobile view</a>
+<a href="{% url force_desktop %}">desktop view</a>

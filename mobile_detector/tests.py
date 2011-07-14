@@ -3,7 +3,7 @@ from django import test
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 
-from mobile_detector import is_mobile, use_mobile, user_declined_mobile
+from mobile_detector import is_mobile, use_mobile, no_mobile_cookie
 from mobile_detector import mobile_cookie_name
 from mobile_detector.context_processors import detect_mobile
 
@@ -31,14 +31,14 @@ class MobileUtilitiesTests(test.TestCase):
 
     def test_returns_true_when_user_has_mobile_cookie_false(self):
         self.request.COOKIES = {mobile_cookie_name: 'false'}
-        self.assertTrue(user_declined_mobile(self.request))
+        self.assertTrue(no_mobile_cookie(self.request))
 
     def test_returns_false_when_user_has_mobile_cookie_true(self):
         self.request.COOKIES = {mobile_cookie_name: 'true'}
-        self.assertFalse(user_declined_mobile(self.request))
+        self.assertFalse(no_mobile_cookie(self.request))
 
     def test_returns_false_when_user_does_not_have_mobile_cookie(self):
-        self.assertFalse(user_declined_mobile(self.request))
+        self.assertFalse(no_mobile_cookie(self.request))
 
     def test_returns_true_when_is_mobile_and_not_user_declined_mobile(self):
         self.request.META = {'HTTP_USER_AGENT': 'android'}
@@ -52,6 +52,11 @@ class MobileUtilitiesTests(test.TestCase):
         self.request.COOKIES = {mobile_cookie_name: 'false'}
         self.request.META = {'HTTP_USER_AGENT': 'android'}
         self.assertEqual(False, use_mobile(self.request))
+
+    def test_returns_true_when_is_not_mobile_but_has_mobile_cookie(self):
+        self.request.COOKIES = {mobile_cookie_name: 'true'}
+        self.request.META = {'HTTP_USER_AGENT': 'chrome'}
+        self.assertEqual(True, use_mobile(self.request))
 
 class ContextProcessorTests(test.TestCase):
 
