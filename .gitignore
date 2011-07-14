@@ -5,5 +5,6 @@ example.db
 build/*
 dist/*
 
+*.egg-info
 *.pyc
 *.pyo

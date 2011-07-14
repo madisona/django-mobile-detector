@@ -18,6 +18,7 @@ setup(
     description="A small app to detect mobile browsers.",
     long_description=open(README, 'r').read(),
 #    url="https://github.com/madisona/django-mongo-storage",
+    test_suite='runtests.runtests',
     packages=("mobile_detector",),
     install_requires=REQUIREMENTS,
     classifiers=[

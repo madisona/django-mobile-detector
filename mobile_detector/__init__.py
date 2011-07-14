@@ -10,7 +10,8 @@ __all__ = (
     'is_mobile', 'use_mobile', 'no_mobile_cookie',
 )
 
-mobile_cookie_name = getattr(settings, 'MOBILE_COOKIE_NAME', 'use_mobile')
+def get_mobile_cookie_name():
+    return getattr(settings, 'MOBILE_COOKIE_NAME', 'use_mobile')
 
 # a regular expression to match a user agent, case insensitive
 MOBILE_RE_1 = re.compile(
@@ -48,10 +49,10 @@ def is_mobile(request):
     return bool(MOBILE_RE_1.search(user_agent) or MOBILE_RE_2.search(user_agent[0:4]))
 
 def no_mobile_cookie(request):
-    return request.COOKIES.get(mobile_cookie_name) == "false"
+    return request.COOKIES.get(get_mobile_cookie_name()) == "false"
 
 def use_mobile_cookie(request):
-    return request.COOKIES.get(mobile_cookie_name) == "true"
+    return request.COOKIES.get(get_mobile_cookie_name()) == "true"
 
 def use_mobile(request):
     return use_mobile_cookie(request) or bool(is_mobile(request) and not no_mobile_cookie(request))
