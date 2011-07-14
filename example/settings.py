@@ -38,3 +38,5 @@ INSTALLED_APPS = (
     'mobile_detector',
     'sample',
 )
+
+MOBILE_COOKIE_NAME = "use_mobile"

@@ -1,12 +1,16 @@
 
 import re
 
+from django.conf import settings
+
 VERSION = '0.1.0'
 
 __all__ = (
     'VERSION',
     'is_mobile', 'use_mobile', 'user_declined_mobile',
 )
+
+mobile_cookie_name = getattr(settings, 'MOBILE_COOKIE_NAME', 'use_mobile')
 
 # a regular expression to match a user agent, case insensitive
 MOBILE_RE_1 = re.compile(
@@ -44,7 +48,7 @@ def is_mobile(request):
     return bool(MOBILE_RE_1.search(user_agent) or MOBILE_RE_2.search(user_agent[0:4]))
 
 def user_declined_mobile(request):
-    return bool(request.COOKIES.get('no_mobile', False))
+    return request.COOKIES.get(mobile_cookie_name) == "false"
 
 def use_mobile(request):
     return bool(is_mobile(request) and not user_declined_mobile(request))
