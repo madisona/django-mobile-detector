@@ -1,6 +1,8 @@
 
 import re
 
+VERSION = '0.1.3'
+
 __all__ = (
     'use_mobile',
 )
