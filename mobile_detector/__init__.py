@@ -1,16 +1,12 @@
 
 import re
 
-from django.conf import settings
-
-VERSION = '0.1.0'
-
 __all__ = (
-    'VERSION',
-    'is_mobile', 'use_mobile', 'no_mobile_cookie',
+    'use_mobile',
 )
 
 def get_mobile_cookie_name():
+    from django.conf import settings
     return getattr(settings, 'MOBILE_COOKIE_NAME', 'use_mobile')
 
 # a regular expression to match a user agent, case insensitive
